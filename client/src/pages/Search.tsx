@@ -1,18 +1,34 @@
 import { useState } from "react";
+import type { Album } from "../types/album";
+import AlbumCard from "../components/AlbumCard";
 
 export default function Search() {
 
     const [term, setTerm] = useState("");
-    const [albums, setAlbums] = useState([]);
+    const [albums, setAlbums] = useState<Album[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-    async function handleSearch() {
-        const response = await fetch(
-            `http://localhost:3000/api/search?term=${term}`
-        );
+    const handleSearch = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const response = await fetch(
+                `http://localhost:3000/api/search?term=${term}`
+            );
 
-        const data = await response.json();
+            if (!response.ok) {
+                throw new Error("Search failed.");
+            }
 
-        setAlbums(data);
+            const data = await response.json();
+
+            setAlbums(data);
+        } catch (err) {
+            setError("Something went wrong.");
+        } finally {
+            setLoading(false);
+        }
     }
 
 
@@ -30,14 +46,11 @@ export default function Search() {
                 Search
             </button>
 
-            {albums.map((album: any) => (
-                <div key={album.id}>
-                    <img src={album.artwork} alt={album.title} />
+            {loading && <p>Loading...</p>}
+            {error && <p>{error}</p>}
 
-                    <h3>{album.title}</h3>
-
-                    <p>{album.artist}, {new Date(album.releaseDate).getFullYear()}</p>
-                </div>
+            {!loading && albums.map((album: Album) => (
+                <AlbumCard key={album.id} album={album} />
             ))}
         </div>
     );
