@@ -1,10 +1,7 @@
-import { Router } from "express";
-import { searchAlbums } from "../services/appleMusic.js";
+import type { Request, Response } from "express";
+import { searchAlbums } from "../services/appleMusicService.js";
 
-const router = Router();
-
-
-router.get("/search", async (req, res) => {
+export async function searchAlbumsController(req: Request, res: Response): Promise<Response | void> {
     try {
         const term = req.query.term as string;
 
@@ -25,7 +22,4 @@ router.get("/search", async (req, res) => {
             message: "Server error"
         });
     }
-});
-
-
-export default router;
+}

@@ -22,7 +22,7 @@ function SearchResultsPage() {
                 setError("");
 
                 const response = await fetch(
-                    `http://localhost:3000/api/search?term=${encodeURIComponent(query)}`
+                    `http://localhost:3000/api/albums/search?term=${encodeURIComponent(query)}`
                 );
 
                 if (!response.ok) {
