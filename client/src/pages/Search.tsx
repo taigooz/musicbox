@@ -1,34 +1,15 @@
 import { useState } from "react";
-import type { Album } from "../types/album";
-import AlbumCard from "../components/AlbumCard";
+import { useNavigate } from "react-router-dom";
 
 export default function Search() {
+    const navigate = useNavigate();
+    const [search, setSearch] = useState("");
 
-    const [term, setTerm] = useState("");
-    const [albums, setAlbums] = useState<Album[]>([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    function handleSearch() {
+        if (!search) return;
 
-    const handleSearch = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-            const response = await fetch(
-                `http://localhost:3000/api/search?term=${term}`
-            );
-
-            if (!response.ok) {
-                throw new Error("Search failed.");
-            }
-
-            const data = await response.json();
-
-            setAlbums(data);
-        } catch (err) {
-            setError("Something went wrong.");
-        } finally {
-            setLoading(false);
-        }
+        // Redirect to the search results page with the search term as a query parameter
+        navigate(`/search?q=${encodeURIComponent(search)}`);
     }
 
 
@@ -37,21 +18,14 @@ export default function Search() {
             <h1>Search Albums</h1>
 
             <input
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search album..."
             />
 
             <button onClick={handleSearch}>
                 Search
             </button>
-
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
-
-            {!loading && albums.map((album: Album) => (
-                <AlbumCard key={album.id} album={album} />
-            ))}
         </div>
     );
 }

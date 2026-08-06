@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Album } from "../types/album";
 import AlbumCard from "../components/AlbumCard";
+import Search from "./Search";
 
 
-function SearchResults() {
+function SearchResultsPage() {
     const [params] = useSearchParams();
     const query = params.get("q") ?? "";
 
@@ -47,7 +48,9 @@ function SearchResults() {
 
     return (
         <div>
-            <h1>Search Results for "{query}"</h1>
+            <Search />
+            <br></br>
+            <h2>Search Results for "{query}"</h2>
 
             {loading && <p>Loading...</p>}
 
@@ -65,4 +68,4 @@ function SearchResults() {
     );
 }
 
-export default SearchResults;
+export default SearchResultsPage;
