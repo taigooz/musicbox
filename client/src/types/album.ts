@@ -1,5 +1,9 @@
 export type Album = {
+    id: number;
     title: string;
     artist: string;
-    year: number;
-}
+    releaseDate: string;
+    artwork: string;
+    explicit: string;
+    trackCount: number;
+};

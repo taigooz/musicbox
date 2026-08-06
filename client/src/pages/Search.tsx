@@ -3,9 +3,16 @@ import { useState } from "react";
 export default function Search() {
 
     const [term, setTerm] = useState("");
+    const [albums, setAlbums] = useState([]);
 
-    function handleSearch() {
-        console.log(term);
+    async function handleSearch() {
+        const response = await fetch(
+            `http://localhost:3000/api/search?term=${term}`
+        );
+
+        const data = await response.json();
+
+        setAlbums(data);
     }
 
 
@@ -22,6 +29,16 @@ export default function Search() {
             <button onClick={handleSearch}>
                 Search
             </button>
+
+            {albums.map((album: any) => (
+                <div key={album.id}>
+                    <img src={album.artwork} alt={album.title} />
+
+                    <h3>{album.title}</h3>
+
+                    <p>{album.artist}, {new Date(album.releaseDate).getFullYear()}</p>
+                </div>
+            ))}
         </div>
     );
 }
