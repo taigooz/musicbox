@@ -1,10 +1,6 @@
-interface Album {
-    title: string;
-    artist: string;
-    year: number;
-}
+import type { Album } from '../types/album';
 
-interface AlbumCardProps {
+type AlbumCardProps = {
     album: Album;
 }
 

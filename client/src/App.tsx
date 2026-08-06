@@ -1,33 +1,19 @@
 import { useState } from 'react';
 import './App.css'
 import AlbumCard from './components/AlbumCard'
+import type { Album } from './types/album';
 
-const albums = [
-  {
-    title: 'OK Computer',
-    artist: 'Radiohead',
-    year: 1997,
-  },
-  {
-    title: 'The Dark Side of the Moon',
-    artist: 'Pink Floyd',
-    year: 1973,
-  },
-  {
-    title: 'Abbey Road',
-    artist: 'The Beatles',
-    year: 1969,
-  },
-  {
-    title: 'Thriller',
-    artist: 'Michael Jackson',
-    year: 1982,
-  }
-];
+
 
 function App() {
+  const [albums, setAlbums] = useState<Album[]>([]);
   const [search, setSearch] = useState('');
 
+  const searchAlbums = async () => {
+    const response = await fetch(`http://localhost:3000/api/albums/search?term=${search}`);
+    const data = await response.json();
+    console.log(data);
+  }
   return (
     <>
 
@@ -39,6 +25,9 @@ function App() {
         onChange={ (e) => setSearch(e.target.value) }
       />
 
+      <button onClick={searchAlbums}>
+        Search
+      </button>
 
 
       <p>No albums saved yet. Also: search = {search}</p>
