@@ -26,7 +26,7 @@ export async function searchAlbums(term: string) {
                         artist: track.artistName,
                         releaseDate: track.releaseDate,
                         artwork: track.artworkUrl100,
-                        explicit: track.collectionExplicitness,
+                        explicit: track.collectionExplicitness === "explicit",
                         trackCount: track.trackCount
                     }
                 ])

@@ -23,6 +23,14 @@ db.exec(`
 
         FOREIGN KEY (albumId) REFERENCES albums(id)
     );
+
+    CREATE TABLE IF NOT EXISTS album_user_data (
+        albumId TEXT PRIMARY KEY,
+        listened INTEGER NOT NULL DEFAULT 0,
+        rating INTEGER CHECK (rating >= 0 AND rating <= 10),
+        review TEXT,
+        FOREIGN KEY (albumId) REFERENCES albums(id)
+    )
 `);
 
 export default db;

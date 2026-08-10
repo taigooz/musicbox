@@ -1,13 +1,53 @@
-POST http://localhost:3000/api/albums
+@baseUrl = http://localhost:3000/api
+
+
+POST {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/review
 Content-Type: application/json
 
 {
-    "title": "OK Computer",
-    "artist": "Radiohead",
-    "releaseDate": "1997-05-21",
-    "artworkUrl": "https://example.com/okcomputer.jpg",
-    "explicit": false,
-    "trackCount": 12,
-    "source": "itunes",
-    "externalId": "123456"
+    "review": "tyler the creator the way she okokok on my computer 2"
 }
+
+###
+
+DELETE {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/review
+
+###
+
+DELETE {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/rating
+
+###
+POST {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/rating
+Content-Type: application/json
+
+{
+    "rating": 10
+}
+
+###
+
+GET {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/user-data
+
+###
+
+DELETE {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/user-data
+
+###
+
+POST {{baseUrl}}/albums/de5a8edd-23b1-4d83-9f65-ea9fb1cd980f/review
+Content-Type: application/json
+
+{
+    "review": "jschlatt is the best"
+}
+
+###
+POST {{baseUrl}}/albums/de5a8edd-23b1-4d83-9f65-ea9fb1cd980f/rating
+Content-Type: application/json
+
+{
+    "rating": 9
+}
+
+###
+GET {{baseUrl}}/albums/library

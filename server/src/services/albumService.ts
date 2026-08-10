@@ -96,3 +96,13 @@ export function findOrCreateAlbum(album: CreateAlbumData) {
 
     return createAlbum(album);
 }
+
+export function getAlbumById(id: string) {
+    const album = db.prepare(`
+        SELECT *
+        FROM albums
+        WHERE id = ?
+    `).get(id);
+
+    return album;
+}
