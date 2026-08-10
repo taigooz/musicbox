@@ -1,0 +1,13 @@
+POST http://localhost:3000/api/albums
+Content-Type: application/json
+
+{
+    "title": "OK Computer",
+    "artist": "Radiohead",
+    "releaseDate": "1997-05-21",
+    "artworkUrl": "https://example.com/okcomputer.jpg",
+    "explicit": false,
+    "trackCount": 12,
+    "source": "itunes",
+    "externalId": "123456"
+}

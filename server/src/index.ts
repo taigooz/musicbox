@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 
+import db from "./database/database.js";
 import albumRoutes from "./routes/albumRoutes.js";
 
 const app = express();
