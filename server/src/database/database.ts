@@ -2,6 +2,8 @@ import Database from "better-sqlite3";
 import type { Database as DatabaseType } from "better-sqlite3";
 
 const db: DatabaseType = new Database("musicbox.db");
+db.pragma("foreign_keys = ON");
+
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS albums (
@@ -21,7 +23,7 @@ db.exec(`
 
         PRIMARY KEY (source, externalId),
 
-        FOREIGN KEY (albumId) REFERENCES albums(id)
+        FOREIGN KEY (albumId) REFERENCES albums(id) ON DELETE CASCADE
     );
 
     CREATE TABLE IF NOT EXISTS album_user_data (
@@ -29,7 +31,8 @@ db.exec(`
         listened INTEGER NOT NULL DEFAULT 0,
         rating INTEGER CHECK (rating >= 0 AND rating <= 10),
         review TEXT,
-        FOREIGN KEY (albumId) REFERENCES albums(id)
+        reviewedAt TEXT,
+        FOREIGN KEY (albumId) REFERENCES albums(id) ON DELETE CASCADE
     )
 `);
 

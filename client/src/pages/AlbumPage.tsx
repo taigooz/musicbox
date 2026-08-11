@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import type { Album } from "../types/album";
+import "./AlbumPage.css";
+import { Headphones, HeadphoneOff, Star, Edit3 } from "lucide-react";
+import Rating from "../components/Rating";
+import Review from "../components/Review";
 
 function AlbumPage() {
     const { id } = useParams();
+
+    const [album, setAlbum] = useState<Album | null>(null);
+
     const [userData, setUserData] = useState<{
         listened: boolean;
         rating: number | null;
         review: string | null;
         reviewedAt: string | null;
     } | null>(null);
-
-    const [rating, setRating] = useState<number>(0);
-    const [review, setReview] = useState("");
 
     useEffect(() => {
         async function fetchUserData() {
@@ -22,14 +27,60 @@ function AlbumPage() {
             const data = await response.json();
 
             setUserData(data);
-            setRating(data.rating ?? 0);
-            setReview(data.review ?? "");
         }
 
         fetchUserData();
     }, [id]);
 
-    async function handleMarkAsListened() {
+    useEffect(() => {
+        async function fetchAlbum() {
+            const response = await fetch(
+                `http://localhost:3000/api/albums/${id}`
+            );
+            
+            if (!response.ok) {
+                throw new Error("Failed to fetch album");
+            }
+
+            const data = await response.json();
+
+            setAlbum(data);
+        }
+
+        fetchAlbum();
+    }, [id]);
+
+    async function handleListenedClick() {
+        if (!userData) {
+            return;
+        }
+
+        if (userData.listened) {
+            const confirmed = window.confirm(
+                "Are you sure you want to unlisten? This will remove your rating and review."
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            await fetch(
+                `http://localhost:3000/api/albums/${id}/user-data`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            setUserData({
+                listened: false,
+                rating: null,
+                review: null,
+                reviewedAt: null
+            });
+
+            return;
+        }
+
         await fetch(
             `http://localhost:3000/api/albums/${id}/listened`,
             {
@@ -43,7 +94,23 @@ function AlbumPage() {
         }));
     }
 
-    async function handleRateAlbum() {
+    async function handleRating(rating: number | null) {
+        if (rating === null) {
+            await fetch(
+                `http://localhost:3000/api/albums/${id}/rating`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            setUserData((previous) => ({
+                ...previous!,
+                rating: null
+            }));
+
+            return;
+        }
+
         await fetch(
             `http://localhost:3000/api/albums/${id}/rating`,
             {
@@ -64,7 +131,7 @@ function AlbumPage() {
         }));
     }
 
-    async function handleReviewAlbum() {
+    async function handleReview(review: string) {
         await fetch(
             `http://localhost:3000/api/albums/${id}/review`,
             {
@@ -86,96 +153,105 @@ function AlbumPage() {
         }));
     }
 
-    async function handleUnlisten() {
-        const confirmed = window.confirm(
-            "Are you sure you want to unlisten? This will remove your rating and review."
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
+    async function handleDeleteReview() {
         await fetch(
-            `http://localhost:3000/api/albums/${id}/user-data`,
+            `http://localhost:3000/api/albums/${id}/review`,
             {
                 method: "DELETE"
             }
         );
 
-        setUserData({
-            listened: false,
-            rating: null,
+        setUserData((previous) => ({
+            ...previous!,
             review: null,
             reviewedAt: null
-        });
-
-        setReview("");
-        setRating(0);
+        }));
     }
 
     return (
         <>
-            {id &&
-                <div>
-                    <h1>Album Page</h1>
-                </div>}
+            {album && (
+                <main className="album-page">
+                    <section className="album-header">
+                        <img
+                            src={album.artworkUrl.replace("100x100bb.jpg", "600x600bb.jpg")}
+                            alt={album.title}
+                        />
 
-            {userData && (
-                <div>
-                    <p>Listened: {userData.listened ? "Yes" : "No"}</p>
-                    <p>
-                        Rating:{" "}
-                        {userData.rating !== null
-                            ? `${userData.rating}/10`
-                            : "Not rated"}
-                    </p>
-                    <p>
-                        Review: {userData.review ?? "No review"}
-                    </p>
-                </div>
+                        <div className="album-info">
+                            <h1>{album.title}</h1>
+
+                            <h2>{album.artist}</h2>
+
+                            <p>
+                                {new Date(album.releaseDate).getFullYear()}
+                            </p>
+
+                            <p>
+                                {album.trackCount} tracks
+                            </p>
+                        </div>
+                    </section>
+                    <section className="user-activity">
+                        <h2>Your <em>musicbox</em> Activity</h2>
+
+                        {userData && (
+                            <>
+                                <div className="listened-section">
+                                    <button
+                                        className={`listened-button ${
+                                            userData.listened ? "listened" : ""
+                                        }`}
+                                        onClick={handleListenedClick}
+                                        aria-label={
+                                            userData.listened
+                                                ? "Unlisten from album"
+                                                : "Mark album as listened"
+                                        }
+                                    >
+                                        {userData.listened ? (
+                                            <>
+                                                <Headphones className="headphones-icon" />
+                                                <HeadphoneOff className="headphones-off-icon" />
+                                            </>
+                                        ) : (
+                                            <Headphones className="headphones-icon" />
+                                        )}
+                                    </button>
+
+                                    <span>
+                                        {userData.listened
+                                            ? "Listened"
+                                            : "Mark as listened"}
+                                    </span>
+                                </div>
+
+                                <div className="rating-section">
+                                    <h3>Your Rating</h3>
+
+                                    <Rating
+                                        rating={userData.rating}
+                                        onChange={handleRating}
+                                    />
+                                </div>
+
+                                <div className="review-section">
+                                    <h3>Your Review</h3>
+
+                                        <Review
+                                            review={userData.review}
+                                            reviewedAt={userData.reviewedAt}
+                                            onSave={handleReview}
+                                            onDelete={handleDeleteReview}
+                                        />
+                                </div>
+                            </>
+                        )}
+                    </section>
+                </main>
             )}
-            <button onClick={handleMarkAsListened}>
-                Mark as listened
-            </button>
-            <button onClick={handleUnlisten}>
-                Unlisten
-            </button>
-            <div>
-                <label htmlFor="rating">Rating: </label>
-                <select
-                    id="rating"
-                    value={rating}
-                    onChange={(event) => setRating(Number(event.target.value))}
-                >
-                    <option value={0}>0</option>
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={6}>6</option>
-                    <option value={7}>7</option>
-                    <option value={8}>8</option>
-                    <option value={9}>9</option>
-                    <option value={10}>10</option>
-                </select>
 
-                <button onClick={handleRateAlbum}>
-                    Rate
-                </button>
-            </div>
-            <div>
-                <label htmlFor="review">Review: </label>
-                <textarea
-                    id="review"
-                    value={review}
-                    onChange={(event) => setReview(event.target.value)}
-                    rows={8}
-                />
-                <button onClick={handleReviewAlbum}>
-                    Submit Review
-                </button>
-            </div>
+            
         </>
     );
 }

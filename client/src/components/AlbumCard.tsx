@@ -19,7 +19,7 @@ function AlbumCard({ album }: AlbumCardProps) {
                 title: album.title,
                 artist: album.artist,
                 releaseDate: album.releaseDate,
-                artworkUrl: album.artwork,
+                artworkUrl: album.artworkUrl,
                 explicit: album.explicit,
                 trackCount: album.trackCount,
                 source: "itunes",
@@ -37,7 +37,7 @@ function AlbumCard({ album }: AlbumCardProps) {
 
     return (
         <div className="album-card" onClick={handleCardClick}>
-            <img src={album.artwork} alt={album.title} />
+            <img src={album.artworkUrl} alt={album.title} />
 
             <h2>{album.title}</h2>
 

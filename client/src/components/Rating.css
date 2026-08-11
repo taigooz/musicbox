@@ -1,0 +1,42 @@
+.rating-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.rating-buttons button {
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    border: 1px solid #d8d8d8;
+    border-radius: 50%;
+
+    background: white;
+    color: #555;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
+}
+
+.rating-buttons button:hover {
+    border-color: #008518;
+    color: #008518;
+
+    transform: translateY(-2px);
+}
+
+.rating-buttons button.selected {
+    border-color: #008518;
+
+    background: #008518;
+    color: white;
+}
