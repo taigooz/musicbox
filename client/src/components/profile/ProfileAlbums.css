@@ -1,0 +1,23 @@
+.profile-album-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+}
+
+.profile-album img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.profile-album h3 {
+    margin: 8px 0 2px;
+    font-size: 15px;
+}
+
+.profile-album p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}

@@ -1,16 +1,7 @@
-import { useState } from "react";
-import "./ProfilePage.css";
-
-type ProfileTab =
-    | "overview"
-    | "albums"
-    | "spins"
-    | "lists"
-    | "reviews";
+import { NavLink, Outlet } from "react-router-dom";
+import "./ProfilePage.css"
 
 function ProfilePage() {
-    const [activeTab, setActiveTab] = useState<ProfileTab>("overview");
-
     return (
         <main className="profile-page">
             <section className="profile-header">
@@ -22,72 +13,29 @@ function ProfilePage() {
             </section>
 
             <nav className="profile-tabs">
-                <button
-                    className={activeTab === "overview" ? "active" : ""}
-                    onClick={() => setActiveTab("overview")}
-                >
+                <NavLink to="/profile" end>
                     Overview
-                </button>
+                </NavLink>
 
-                <button
-                    className={activeTab === "albums" ? "active" : ""}
-                    onClick={() => setActiveTab("albums")}
-                >
+                <NavLink to="/profile/albums">
                     Albums
-                </button>
+                </NavLink>
 
-                <button
-                    className={activeTab === "spins" ? "active" : ""}
-                    onClick={() => setActiveTab("spins")}
-                >
-                    Spins
-                </button>
-
-                <button
-                    className={activeTab === "lists" ? "active" : ""}
-                    onClick={() => setActiveTab("lists")}
-                >
-                    Lists
-                </button>
-
-                <button
-                    className={activeTab === "reviews" ? "active" : ""}
-                    onClick={() => setActiveTab("reviews")}
-                >
+                <NavLink to="/profile/reviews">
                     Reviews
-                </button>
+                </NavLink>
+
+                <NavLink to="/profile/spins">
+                    Spins
+                </NavLink>
+
+                <NavLink to="/profile/lists">
+                    Lists
+                </NavLink>
             </nav>
 
             <section className="profile-content">
-                {activeTab === "overview" && (
-                    <div>
-                        <h2>Overview</h2>
-                    </div>
-                )}
-
-                {activeTab === "albums" && (
-                    <div>
-                        <h2>Albums</h2>
-                    </div>
-                )}
-
-                {activeTab === "spins" && (
-                    <div>
-                        <h2>Spins</h2>
-                    </div>
-                )}
-
-                {activeTab === "lists" && (
-                    <div>
-                        <h2>Lists</h2>
-                    </div>
-                )}
-
-                {activeTab === "reviews" && (
-                    <div>
-                        <h2>Reviews</h2>
-                    </div>
-                )}
+                <Outlet />
             </section>
         </main>
     );
