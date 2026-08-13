@@ -5,5 +5,6 @@ export type Album = {
     releaseDate: string;
     artworkUrl: string;
     explicit: boolean;
+    source: string;
     trackCount: number;
 };

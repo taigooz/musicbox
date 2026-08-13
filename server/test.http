@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:3000/api
-
+@mbUrl = https://musicbrainz.org/ws/2
+@deezUrl = https://api.deezer.com
 
 POST {{baseUrl}}/albums/e4cb66b6-30b8-47d3-b0ec-07ce54727745/review
 Content-Type: application/json
@@ -51,3 +52,16 @@ Content-Type: application/json
 
 ###
 GET {{baseUrl}}/albums/library
+
+###
+
+GET {{baseUrl}}/profile/
+
+###
+
+GET {{mbUrl}}/release-group/3bd76d40-7f0e-36b7-9348-91a33afee20e?inc=releases
+User-Agent: musicbox/0.7.0 ( freakybobistesting@gmail.com )
+Accept: application/json
+
+###
+GET ${DEEZER_BASE}/search/album

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { Album } from "../types/album";
 import "./AlbumPage.css";
-import { Headphones, HeadphoneOff, Star, Edit3 } from "lucide-react";
+import { Headphones, HeadphoneOff } from "lucide-react";
 import Rating from "../components/Rating";
 import Review from "../components/Review";
 
@@ -174,7 +174,7 @@ function AlbumPage() {
                 <main className="album-page">
                     <section className="album-header">
                         <img
-                            src={album.artworkUrl.replace("100x100bb.jpg", "600x600bb.jpg")}
+                            src={album.artworkUrl}
                             alt={album.title}
                         />
 

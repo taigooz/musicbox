@@ -12,17 +12,27 @@ db.exec(`
         artist TEXT NOT NULL,
         releaseDate TEXT,
         artworkUrl TEXT,
-        explicit INTEGER,
-        trackCount INTEGER
+        trackCount INTEGER,
+        explicit INTEGER NOT NULL DEFAULT 0,
+        genre TEXT,
+        label TEXT,
+        runtimeMs INTEGER
     );
 
     CREATE TABLE IF NOT EXISTS album_sources (
         albumId TEXT NOT NULL,
         source TEXT NOT NULL,
         externalId TEXT NOT NULL,
-
         PRIMARY KEY (source, externalId),
+        FOREIGN KEY (albumId) REFERENCES albums(id) ON DELETE CASCADE
+    );
 
+    CREATE TABLE IF NOT EXISTS tracks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        albumId TEXT NOT NULL,
+        position INTEGER,
+        title TEXT NOT NULL,
+        durationMs INTEGER,
         FOREIGN KEY (albumId) REFERENCES albums(id) ON DELETE CASCADE
     );
 
@@ -33,6 +43,12 @@ db.exec(`
         review TEXT,
         reviewedAt TEXT,
         FOREIGN KEY (albumId) REFERENCES albums(id) ON DELETE CASCADE
+    );
+    
+    CREATE TABLE IF NOT EXISTS users (
+        id TEXT PRIMARY KEY,
+        username TEXT NOT NULL,
+        bio TEXT
     )
 `);
 
